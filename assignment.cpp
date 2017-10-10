@@ -23,12 +23,16 @@ public:
         ++count;
         return Counter(count);
     }
-
+    Counter operator ++ (int)       // increment postfix -- have to have (int) in order for it to be a postfix
+    {
+        return Counter(count++);
+    }
 };
+
 
 int main()
 {
-    Counter c1, c2, c3;
+    Counter c1, c2, c3,c4;
     cout << "C1 = " << c1.getcount() << endl;
     cout << "C2 = " << c2.getcount() << endl;
     ++c1;
@@ -37,5 +41,8 @@ int main()
     cout << "C2 = " << c2.getcount() << endl;
     c3 = ++c1;
     cout << "C3 = " << c3.getcount() << endl;
+    c4 = c1++;
+    cout << "C1 = " << c1.getcount() << endl;
+    cout << "C4 = " << c4.getcount() << endl;
     return 0;
 }
