@@ -8,7 +8,9 @@ private:
     unsigned int count;     // count
 
 public:
-    Counter():count(0)    // constructor
+    Counter():count(0)    // constructor with no args
+    {};
+    Counter(int c):count(c)     // constructor with arg
     {};
 
     unsigned int getcount()     // return count
@@ -19,9 +21,7 @@ public:
     Counter operator ++()      // increment prefix
     {
         ++count;
-        Counter temp;
-        temp.count = count;
-        return temp;
+        return Counter(count);
     }
 
 };
