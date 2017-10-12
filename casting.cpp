@@ -4,17 +4,25 @@ using namespace std;
 class Distance
 {
 private:
+    const float MTF;        // Constant float meters to feet
     int feet;
     float inches;
 
 public:
-    Distance() : feet(0), inches(0.0)       // Constructor with no arg
+    Distance(): feet(0), inches(0.0), MTF(3.280833F)      // 1. Constructor with no arg
     {};
-    Distance(int f, float i)       // Constructor with 2 args
-            {
-                feet = f;
-                inches = i;
-            };
+    Distance(int meters): MTF(3.280833F)    // 2. Constructor with 1 arg
+    {
+        float fltfeet = MTF * meters;       // Convert to float feet
+        feet = int(fltfeet);        // Same as -- feet = static_cast<int>(fltfeet)
+                                    // Feet is the integer part
+        inches = 12 * (fltfeet - feet);     // Inches is what is left
+    };
+    Distance(int f, float i): MTF(2.280833F)       // 3.Constructor with 2 args
+    {
+        feet = f;
+        inches = i;
+    };
     void getDist()
     {
         cout << "\nEnter feet: ";
@@ -28,11 +36,17 @@ public:
     }
     Distance operator +(Distance) const;        // Add 2 distances
     void operator += (Distance);
+    operator float() const      // Convert to inches
+    {
+        float fracfeet = inches/12;
+        fracfeet += static_cast<float>(feet);
+        return fracfeet/MTF;
+    }
 };
 // Return the sum of both
 Distance Distance::operator+(Distance d2)const
 {
-   int f = feet + d2.feet;
+    int f = feet + d2.feet;
     float i = inches + d2.inches;
     if(i >= 12.0)
     {
@@ -55,16 +69,19 @@ void Distance::operator += (Distance d2)
 
 int main()
 {
-    Distance d1, d3;
-    Distance d2(11, 6.25);
-    d1.getDist();
+    Distance d1;        // 1. Constructor
+    Distance d2(11, 6.25);      // 3. Constructor
+    Distance d3(5);      // 2. Constructor
+    //d1.getDist();
+    float mtrs;
     cout << "Distance d1: ";
     d1.showDist();
     cout << endl;
     cout << "Distance d2: ";
     d2.showDist();
     cout << endl;
-
+    mtrs = static_cast<float>(d2);      // User conversion operator
+    cout << "Distance d2: " << mtrs << "meters" << endl;
     // Add binary operator
     d3 = d1 + d2;
     cout << "Distance d3: ";
